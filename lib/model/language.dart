@@ -1,0 +1,3 @@
+class LanguageModel {
+  String language;
+}

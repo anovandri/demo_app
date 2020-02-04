@@ -1,0 +1,3 @@
+class CrewModel {
+  String name;
+}
