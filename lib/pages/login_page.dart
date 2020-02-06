@@ -1,3 +1,4 @@
+import 'package:demo_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,61 +18,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {}
 
-  Widget buildSignInTextForm() {
+  Widget _buildSignInTextForm() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       width: MediaQuery.of(context).size.width * 0.8,
-      height: 190,
+      height: 110,
       child: Form(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 25,
-                  right: 25,
-                  top: 20,
-                  bottom: 20,
-                ),
-                child: TextFormField(
-                  focusNode: _emailFocusNode,
-                  onEditingComplete: () {
-                    if (_focusScopeNode == null) {
-                      _focusScopeNode = FocusScope.of(context);
-                    }
-                    _focusScopeNode.requestFocus(_passwordFocusNode);
-                  },
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.email,
-                      color: Colors.black,
-                    ),
-                    hintText: "Github",
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Value is empty";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    setState(() {
-                      username = value;
-                    });
-                  },
-                ),
-              ),
-            ),
-            Container(
-              height: 1, 
-              width: MediaQuery.of(context).size.width * 0.75,
-              color: Colors.grey[400],
-            ),
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
@@ -82,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
                       Icons.lock,
                       color: Colors.black,
                     ),
-                    hintText: "Github Id",
+                    hintText: "Enter Token",
                     border: InputBorder.none,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -93,13 +50,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   obscureText: !isShowPassword,
-                  style: TextStyle(
-                    fontSize: 16, 
-                    color: Colors.black
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.black),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Password can't be empty";
+                      return "Token can't be empty";
                     }
                     return null;
                   },
@@ -120,7 +74,37 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  } 
+  }
+
+  Widget _buildSignInButton() {
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.only(
+          left: 42,
+          right: 42,
+          top: 10,
+          bottom: 10,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          color: Theme.of(context).primaryColor,
+        ),
+        child: Text(
+          "LOGIN",
+          style: TextStyle(fontSize: 25, color: Colors.white),
+        ),
+      ),
+      onTap: () {
+        doLogin();
+      },
+    );
+  }
+
+  void doLogin() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (route) => route == null);
+  }
 
   void showPassword() {
     setState(() {
@@ -131,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView (
+      body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -142,44 +126,34 @@ class _LoginPageState extends State<LoginPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 color: Colors.white,
-                image: DecorationImage(
-                  image: AssetImage('images/paimaiLogo.png'),
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.bottomRight,
-                ),
               ),
               child: Stack(
                 children: <Widget>[
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      SizedBox(height: 35.0,),
+                      SizedBox(
+                        height: 35.0,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Image.asset(
-                            'images/gitHub.png',
+                            'images/logo.png',
                             fit: BoxFit.contain,
-                            width: 60.0,
-                            height: 60.0,
-                          ),
-                          Image.asset(
-                            'image/arrow.png',
-                            fit: BoxFit.contain,
-                            width: 40.0,
-                            height: 30.0,
-                          ),
-                          Image.asset(
-                            'image/FlutterGo.png',
-                            fit: BoxFit.contain,
-                            width: 60.0,
-                            height: 0,
+                            width: 80.0,
+                            height: 80.0,
                           ),
                         ],
-                      )
+                      ),
+                      _buildSignInTextForm(),
+                      _buildSignInButton(),
+                      SizedBox(
+                        height: 15.0,
+                      ),
                     ],
                   )
-                ] ,
+                ],
               ),
             ),
           ),
