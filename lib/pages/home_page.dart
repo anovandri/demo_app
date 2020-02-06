@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
 
   String _appBarTitle = 'Dashboard';
-  dynamic _contentBody;
+  dynamic _contentBody = DashboardPage();
 
   void _onPageSelected(int index) {
     switch (index) {

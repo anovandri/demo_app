@@ -47,7 +47,7 @@ class NotMovieWidget extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
                     notMovieTitle,

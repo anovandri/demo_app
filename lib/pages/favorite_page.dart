@@ -6,7 +6,7 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: Center(child: Text('Favorite'))
+      body: Center(child: Text('Favorite Movie'))
     );
   }
 }

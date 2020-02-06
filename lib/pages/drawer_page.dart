@@ -1,10 +1,9 @@
+import 'package:demo_app/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 typedef IntCallback = void Function(int index);
 
-
 class DrawerPage extends StatefulWidget {
-
   final IntCallback callback;
 
   const DrawerPage({Key key, @required this.callback}) : super(key: key);
@@ -14,7 +13,8 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
-  final TextStyle textStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
+  final TextStyle textStyle =
+      TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +27,14 @@ class _DrawerPageState extends State<DrawerPage> {
             padding: const EdgeInsets.only(bottom: 20.0),
             child: Text(
               'ovegn@aux.dkatalis.com',
-              style: TextStyle(
-                fontSize: 28),
+              style: TextStyle(fontSize: 28),
             ),
           ),
           decoration: BoxDecoration(
             image: new DecorationImage(
-              fit: BoxFit.cover,
-              image: new NetworkImage('https://hbimg.huabanimg.com/9bfa0fad3b1284d652d370fa0a8155e1222c62c0bf9d-YjG0Vt_fw658')),
+                fit: BoxFit.cover,
+                image: new NetworkImage(
+                    'https://hbimg.huabanimg.com/9bfa0fad3b1284d652d370fa0a8155e1222c62c0bf9d-YjG0Vt_fw658')),
           ),
         ),
         ListTile(
@@ -101,7 +101,11 @@ class _DrawerPageState extends State<DrawerPage> {
             'Logout',
             style: textStyle,
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (route) => route == null);
+          },
         )
       ],
     );
