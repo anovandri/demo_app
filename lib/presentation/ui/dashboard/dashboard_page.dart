@@ -28,13 +28,13 @@ class _DashboardPage extends State<DashboardPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
-                  _buildMyList(context),
+                  _buildMyFavoriteList(context),
                 ],
               )),
         ));
   }
 
-  _buildMyList(BuildContext context) {
+  _buildMyFavoriteList(BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -44,7 +44,7 @@ class _DashboardPage extends State<DashboardPage> {
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  'My List',
+                  'My Favorites',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16.0,
@@ -62,5 +62,10 @@ class _DashboardPage extends State<DashboardPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

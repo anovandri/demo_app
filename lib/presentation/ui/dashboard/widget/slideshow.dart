@@ -20,7 +20,7 @@ class SlideShowView extends StatefulWidget {
 class _SlideShowViewState extends State<SlideShowView> {
   @override
   Widget build(BuildContext context) {
-    movieBloc.add(MovieFetch(query: ''));
+    movieBloc.add(MovieFetch(title: 'John', type: 'movie', year: 2019));
     return Container(child: BlocBuilder(bloc: movieBloc, builder: (BuildContext context, MovieState state) {
           return renderItem(state);
     },));
@@ -142,5 +142,10 @@ class _SlideShowViewState extends State<SlideShowView> {
         );
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

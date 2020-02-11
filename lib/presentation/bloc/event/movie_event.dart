@@ -1,18 +1,22 @@
 abstract class MovieEvent {}
 
 class MovieFetch extends MovieEvent {
-  final String query;
-
-  MovieFetch({this.query});
+  String title;
+  String type;
+  int year;
+  
+  MovieFetch({this.title, this.type, this.year});
 
   @override
   String toString() => "MovieFetch:";
 }
 
 class MovieClearFetch extends MovieEvent {
-  final String query;
+  String title;
+  String type;
+  int year;
 
-  MovieClearFetch({this.query});
+  MovieClearFetch({this.title, this.type, this.year});
 
   @override
   String toString() => "MovieClearFetch";

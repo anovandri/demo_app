@@ -1,5 +1,8 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:indoxx1/presentation/ui/home/home_page.dart';
+import 'package:indoxx1/routes/application.dart';
+import 'package:indoxx1/routes/routes.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,10 +26,7 @@ class _LoginStatePage extends State<LoginPage> {
   }
 
   void _doLogin() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage()),
-      (route) => route == null
-    );
+    Application.router.navigateTo(context, Routes.home, transition: TransitionType.native);
   }
 
   Widget _buildSignInTextForm() {

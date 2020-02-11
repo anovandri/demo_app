@@ -7,6 +7,6 @@ class OmdbRepository {
 
   final OmdbDatasource omdbRemoteDatasource = OmdbRemoteDatasourceImpl.create();
 
-  Future<List<MovieModel>> listOfMovies() => omdbRemoteDatasource.listOfMovies(
-      apiKey: API_KEY, title: 'John', type: 'movie', year: 2019);
+  Future<List<MovieModel>> listOfMovies({String title, String type, int year}) => omdbRemoteDatasource.listOfMovies(
+      apiKey: API_KEY, title: title, type: type, year: year);
 }

@@ -13,7 +13,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     if (event is MovieFetch) {
       try {
         yield MovieLoading();
-        final res = await OmdbRepository().listOfMovies();
+        final res = await OmdbRepository().listOfMovies(title: event.title, type: event.type, year: event.year);
         yield MovieLoaded(res: res);
       } catch (_) {
         yield MovieError();
