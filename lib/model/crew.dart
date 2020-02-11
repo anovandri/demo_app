@@ -1,3 +1,0 @@
-class CrewModel {
-  String name;
-}

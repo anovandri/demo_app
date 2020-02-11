@@ -1,9 +1,10 @@
-import 'package:demo_app/pages/splashscreen_view.dart';
 import 'package:flutter/material.dart';
+import 'package:indoxx1/presentation/welcome_page.dart';
 
 void main() {
+  //debugPaintSizeEnabled = true;
   runApp(MaterialApp(
-    title: 'SplashScreen',
-    home: SplashScreenPage(),
+    title: 'Indo XX1',
+    home: WelcomePage(),
   ));
 }
