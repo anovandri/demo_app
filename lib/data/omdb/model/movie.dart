@@ -10,7 +10,7 @@ class MovieModel extends BaseModel {
   int _year;
   String _rated;
   DateTime _dateReleased;
-  int _durationInTime;
+  String _durationInTime;
   String _genre;
   List<CrewModel> _crews = [];
   String _plot;
@@ -25,29 +25,31 @@ class MovieModel extends BaseModel {
   String _production;
   String _webSite;
   String _response;
+  double _imdbRating;
 
+  bool isFavorite;
+  
   MovieModel.detailMovieFromJson(Map<String, dynamic> parsedJson) {
     _imdbId = parsedJson['imdbID'];
     _title = parsedJson['Title'];
     _year = int.parse(parsedJson['Year']);
     _rated = parsedJson['Rated'];
     _dateReleased = Util.convertDateFromString(parsedJson['Released']);
-    _durationInTime = int.parse(parsedJson['Runtime']);
+    _durationInTime = parsedJson['Runtime'];
     _genre = parsedJson['Genre'];
     _crews.addAll(this
-        ._generateCrews(crewList: parsedJson['Director'], role: 'director'));
+        ._generateCrews(crewList: parsedJson['Director'].toString().split(','), role: 'director'));
     _crews.addAll(
-        this._generateCrews(crewList: parsedJson['Actors'], role: 'actor'));
+        this._generateCrews(crewList: parsedJson['Actors'].toString().split(','), role: 'actor'));
     _crews.addAll(
-        this._generateCrews(crewList: parsedJson['Writer'], role: 'writer'));
+        this._generateCrews(crewList: parsedJson['Writer'].toString().split(','), role: 'writer'));
     _plot = parsedJson['Plot'];
     _language = parsedJson['Language'];
     _country = parsedJson['Country'];
     _awards = parsedJson['Awards'];
     _poster = parsedJson['Poster'];
-    this._generateRatings(parsedJson['Ratings']);
+    _imdbRating = double.parse(parsedJson['imdbRating']);
     _type = parsedJson['Type'];
-    _dvdReleased = Util.convertDateFromString(parsedJson['DVD']);
     _boxOffice = parsedJson['BoxOffice'];
     _production = parsedJson['Production'];
     _webSite = parsedJson['Website'];
@@ -55,8 +57,8 @@ class MovieModel extends BaseModel {
   }
 
   MovieModel.movieFromJson(Map<String, dynamic> parsedJson) {
-    _imdbId = parsedJson['imdbId'];
-    _year = int.parse(parsedJson['Year']);
+    _imdbId = parsedJson['imdbID'];
+    _year = int.parse(parsedJson['Year'].toString().trim());
     _title = parsedJson['Title'];
     _type = parsedJson['Type'];
     _poster = parsedJson['Poster'];
@@ -67,7 +69,7 @@ class MovieModel extends BaseModel {
   int get year => _year;
   String get rated => _rated;
   DateTime get dateReleased => _dateReleased;
-  int get durationInTime => _durationInTime;
+  String get durationInTime => _durationInTime;
   String get genre => _genre;
   List<CrewModel> get crews => _crews;
   String get plot => _plot;
@@ -82,6 +84,7 @@ class MovieModel extends BaseModel {
   String get production => _production;
   String get webSite => _webSite;
   String get response => _response; 
+  double get imdbRating => _imdbRating;
 
   List<CrewModel> _generateCrews(
       {@required List<String> crewList, @required String role}) {
@@ -95,9 +98,10 @@ class MovieModel extends BaseModel {
     return crews;
   }
 
-  List<RatingModel> _generateRatings(dynamic ratings) {
-    for (var rating in ratings) {
-      _ratings.add(RatingModel.fromJson(rating));
-    }
+  List<RatingModel> _generateRatings(dynamic decodedRating) {
+    decodedRating.forEach((listItem) {
+      _ratings.add(RatingModel.fromJson(listItem as Map<String, dynamic>));
+    });
+    return _ratings;
   }
 }

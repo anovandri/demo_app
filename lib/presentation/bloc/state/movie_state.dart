@@ -1,27 +1,40 @@
+import 'package:indoxx1/data/omdb/model/movie.dart';
+
 abstract class MovieState {}
 
-class MovieError extends MovieState {
+class MovieErrorState extends MovieState {
   @override
   String toString() => "MovieError";
 }
 
-class MovieUninitialized extends MovieState {
+class MovieUninitializedState extends MovieState {
   @override
   String toString() => "MovieUninitialized";
 }
 
-class MovieLoading extends MovieState {
+class MovieLoadingState extends MovieState {
   @override
   String toString() => "MovieLoading";
 }
 
-class MovieLoaded extends MovieState {
+class MovieLoadedState extends MovieState {
   final List res;
 
-  MovieLoaded({
+  MovieLoadedState({
     this.res
   });
 
   @override
   String toString() => "MovieLoaded";
+}
+
+class MovieSingleLoadedState extends MovieState {
+  final MovieModel res;
+
+  MovieSingleLoadedState({
+    this.res
+  });
+
+  @override
+  String toString() => "MovieSingleLoaded";
 }

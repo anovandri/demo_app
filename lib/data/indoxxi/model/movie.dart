@@ -1,6 +1,6 @@
 import 'package:indoxx1/data/omdb/model/base.dart';
 
-class MovieModel extends BaseModel {
+class MovieFavoriteModel extends BaseModel {
   String _id;
   String _title;
   int _year;
@@ -11,10 +11,10 @@ class MovieModel extends BaseModel {
   int _rating;
   int _timestamp;
 
-  MovieModel.movieFromJson (Map<String, dynamic> parsedJson) {
+  MovieFavoriteModel.movieFromJson (Map<String, dynamic> parsedJson) {
     _id = parsedJson['id'];
     _title = parsedJson['title'];
-    _year = int.parse(parsedJson['year']);
+    _year = int.parse(parsedJson['year'].toString().trim());
     _poster = parsedJson['poster'];
     _label = parsedJson['label']; 
     _priority = int.parse(parsedJson['priority'].toString().trim());

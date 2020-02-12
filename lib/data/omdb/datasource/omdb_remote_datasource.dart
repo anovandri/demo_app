@@ -37,4 +37,17 @@ class OmdbRemoteDatasourceImpl implements OmdbDatasource {
     });
     return movies;
   }
+
+  @override
+    Future<MovieModel> getDetailMovie({String apiKey, String id}) async {
+    Uri uri = Uri.http(OMDB_DOMAIN, "", {
+      'apiKey': apiKey,
+      'i': id,
+    });
+    final response = await client.get(uri);
+    String json = response.body;
+    Map<String, dynamic> decodedJson = jsonDecode(json);
+    return MovieModel.detailMovieFromJson(decodedJson);
+  }
+
 }

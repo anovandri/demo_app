@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:indoxx1/data/omdb/model/movie.dart';
-import 'package:indoxx1/presentation/bloc/event/movie_event.dart';
-import 'package:indoxx1/presentation/bloc/movie_bloc.dart';
-import 'package:indoxx1/presentation/bloc/state/movie_state.dart';
+import 'package:indoxx1/data/indoxxi/model/movie.dart';
+import 'package:indoxx1/presentation/bloc/event/movie_favorite_event.dart';
+import 'package:indoxx1/presentation/bloc/movie_favorite_bloc.dart';
+import 'package:indoxx1/presentation/bloc/state/movie_favorite_state.dart';
 
-final MovieBloc movieBloc = MovieBloc();
+final MovieFavoriteBloc movieBloc = MovieFavoriteBloc();
 
 class SlideShowView extends StatefulWidget {
   final Function(String imdbId) onItemInteraction;
@@ -20,26 +20,30 @@ class SlideShowView extends StatefulWidget {
 class _SlideShowViewState extends State<SlideShowView> {
   @override
   Widget build(BuildContext context) {
-    movieBloc.add(MovieFetch(title: 'John', type: 'movie', year: 2019));
-    return Container(child: BlocBuilder(bloc: movieBloc, builder: (BuildContext context, MovieState state) {
-          return renderItem(state);
-    },));
+    movieBloc.add(MoviePopularFetchEvent());
+    return Container(
+        child: BlocBuilder(
+      bloc: movieBloc,
+      builder: (BuildContext context, MovieFavoriteState state) {
+        return renderItem(state);
+      },
+    ));
   }
 
   Widget renderItem(state) {
-    if (state is MovieUninitialized) {
+    if (state is MovieFavoriteUninitializedState) {
       return Center(
         child: Text('No content yet'),
       );
-    } else if (state is MovieLoading) {
+    } else if (state is MovieFavoriteLoadingState) {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (state is MovieError) {
+    } else if (state is MovieFavoriteErrorState) {
       return Center(
         child: Text('An error occured'),
       );
-    } else if (state is MovieLoaded) {
+    } else if (state is MovieFavoriteLoadedState) {
       if (state.res.length == 0) {
         return Center(
           child: Text('No suitable results, try changing query conditions'),
@@ -50,7 +54,7 @@ class _SlideShowViewState extends State<SlideShowView> {
     }
   }
 
-  Widget buildContent(List<MovieModel> movies, BuildContext context) {
+  Widget buildContent(List<MovieFavoriteModel> movies, BuildContext context) {
     var width = MediaQuery.of(context).size.width;
 
     return Padding(
@@ -73,15 +77,16 @@ class _SlideShowViewState extends State<SlideShowView> {
               return InkWell(
                 onTap: () {
                   if (widget.onItemInteraction != null) {
-                    widget.onItemInteraction(item.imdbId);
+                    widget.onItemInteraction(item.id);
                   } else {
                     debugPrint("No handle");
                   }
                 },
                 child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    child: _buildItem(item.poster, item.title)),
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: _buildItem(item.poster, item.title)
+                ),
               );
             },
           );

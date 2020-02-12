@@ -6,25 +6,35 @@ import 'package:indoxx1/presentation/bloc/state/movie_state.dart';
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   @override
-  MovieState get initialState => MovieUninitialized();
+  MovieState get initialState => MovieUninitializedState();
 
   @override
   Stream<MovieState> mapEventToState(MovieEvent event) async* {
-    if (event is MovieFetch) {
+    if (event is MovieFetchEvent) {
       try {
-        yield MovieLoading();
+        yield MovieLoadingState();
         final res = await OmdbRepository().listOfMovies(title: event.title, type: event.type, year: event.year);
-        yield MovieLoaded(res: res);
+        yield MovieLoadedState(res: res);
       } catch (_) {
-        yield MovieError();
+        yield MovieErrorState();
       }
     }
 
-    if (event is MovieClearFetch) {
+    if (event is MovieDetailFetchEvent) {
       try {
-        yield MovieUninitialized();
+        yield MovieLoadingState();
+        final res = await OmdbRepository().getDetailMovie(id: event.id);
+        yield MovieSingleLoadedState(res: res);
       } catch (_) {
-        yield MovieError();
+        yield MovieErrorState();
+      }
+    }
+
+    if (event is MovieClearFetchEvent) {
+      try {
+        yield MovieUninitializedState();
+      } catch (_) {
+        yield MovieErrorState();
       }
     }
   }
