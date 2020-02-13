@@ -1,8 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:indoxx1/common/util/shared_preferences.dart';
-import 'package:indoxx1/common/util/shared_preferences_key.dart';
 import 'package:indoxx1/presentation/bloc/event/user_event.dart';
 import 'package:indoxx1/presentation/bloc/state/user_state.dart';
 import 'package:indoxx1/presentation/bloc/user_bloc.dart';
@@ -11,16 +9,18 @@ import 'package:indoxx1/routes/routes.dart';
 
 final UserBloc userBloc = UserBloc();
 
-class LoginPage extends StatefulWidget {
+class AddUserPage extends StatefulWidget {
+
   @override
-  _LoginStatePage createState() => _LoginStatePage();
+  _AddUserPageState createState() => _AddUserPageState();
 }
 
-class _LoginStatePage extends State<LoginPage> {
-  FocusNode _tokenFocusNode = new FocusNode();
-
+class _AddUserPageState extends State<AddUserPage> {
   bool _isShowToken = false;
-  final tokenController = TextEditingController();
+
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _tokenController = TextEditingController();
 
   void _showToken() {
     setState(() {
@@ -32,41 +32,99 @@ class _LoginStatePage extends State<LoginPage> {
     });
   }
 
-  void _doLogin(BuildContext context) {
-    String tokenId = tokenController.text;
-    if (tokenId.trim() == '') {
+  void _doSignUp(BuildContext context) {
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String token = _tokenController.text;
+
+    if (name.trim() == '' || email.trim() == '' || token.trim() == '') {
       SnackBar snackBar = SnackBar(
         duration: const Duration(seconds: 5),
         content: Text('Please fill the token'),
       );
       Scaffold.of(context).showSnackBar(snackBar);
     } else {
-      userBloc.add(UserFetchEvent(tokenId: tokenId));
+      userBloc.add(UserAddNewEvent(name: name, email: email, tokenId: token));
     }
   }
 
   void _listen(BuildContext context, state) {
-    if (state is UserLoadedState) {
-      if (state.res != null && state.res != "") {
-        SpUtil.getInstance().then(
-            (sp) {
-          sp.putString(SharedPreferencesKeys.name, state.res.name); 
-          sp.putString(SharedPreferencesKeys.email, state.res.email);
-          sp.putString(SharedPreferencesKeys.tokenId, state.res.tokenId);   
-        });
-        Application.router.navigateTo(context, Routes.home,
+    if (state is UserAddNewState) {
+      if (state.res != null && state.res != "Success") {
+        Application.router.navigateTo(context, Routes.login,
             transition: TransitionType.native);
       } else {
         SnackBar snackBar = SnackBar(
           duration: const Duration(seconds: 5),
-          content: Text('You have not registered'),
+          content: Text(state.res),
         );
         Scaffold.of(context).showSnackBar(snackBar);
       }
     }
   }
 
-  Widget _buildSignInTextForm() {
+  Widget _buildInputTextForm() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      width: MediaQuery.of(context).size.width * 0.8,
+      height: 190,
+      child: Form(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 25, right: 25, top: 20, bottom: 20),
+                child: TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.black,
+                      ),
+                      hintText: "Name",
+                      border: InputBorder.none),
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ),
+            ),
+            Container(
+              height: 1,
+              width: MediaQuery.of(context).size.width * 0.75,
+              color: Colors.grey[400],
+            ),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 25, right: 25, top: 20, bottom: 20),
+                child: TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.email,
+                        color: Colors.black,
+                      ),
+                      hintText: "Email",
+                      border: InputBorder.none),
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ),
+            ),
+            Container(
+              height: 1,
+              width: MediaQuery.of(context).size.width * 0.75,
+              color: Colors.grey[400],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTokenTextForm() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -81,13 +139,12 @@ class _LoginStatePage extends State<LoginPage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
                 child: TextFormField(
-                  focusNode: _tokenFocusNode,
                   decoration: InputDecoration(
                     icon: Icon(
                       Icons.lock,
                       color: Colors.black,
                     ),
-                    hintText: "Enter Token",
+                    hintText: "Token",
                     border: InputBorder.none,
                     suffixIcon: IconButton(
                         icon: Icon(Icons.remove_red_eye, color: Colors.black),
@@ -95,13 +152,7 @@ class _LoginStatePage extends State<LoginPage> {
                   ),
                   obscureText: !this._isShowToken,
                   style: TextStyle(fontSize: 16, color: Colors.black),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Token can't be empty";
-                    }
-                    return null;
-                  },
-                  controller: tokenController,
+                  controller: _tokenController,
                 ),
               ),
             ),
@@ -116,7 +167,7 @@ class _LoginStatePage extends State<LoginPage> {
     );
   }
 
-  Widget _buildSignInButton(BuildContext context) {
+  Widget _buildSignUPButton(BuildContext context) {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.only(
@@ -130,17 +181,17 @@ class _LoginStatePage extends State<LoginPage> {
           color: Theme.of(context).primaryColor,
         ),
         child: Text(
-          "SIGN IN",
+          "SIGN UP",
           style: TextStyle(fontSize: 25, color: Colors.white),
         ),
       ),
       onTap: () {
-        this._doLogin(context);
+        this._doSignUp(context);
       },
     );
   }
 
-  Widget _buildSignUpButton(BuildContext context) {
+  Widget _buildCancelButton(BuildContext context) {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
@@ -149,16 +200,16 @@ class _LoginStatePage extends State<LoginPage> {
           color: Colors.blueGrey,
         ),
         child: Text(
-          "SIGN UP",
+          "CANCEL",
           style: TextStyle(fontSize: 25, color: Colors.white),
         ),
       ),
       onTap: () {
-        Application.router.navigateTo(context, Routes.addUser,
-            transition: TransitionType.native);
+        Navigator.of(context).pop();
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -200,15 +251,16 @@ class _LoginStatePage extends State<LoginPage> {
                               )
                             ],
                           ),
-                          this._buildSignInTextForm(),
+                          this._buildInputTextForm(),
+                          this._buildTokenTextForm(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              this._buildSignInButton(context),
+                              this._buildSignUPButton(context),
                               SizedBox(
                                 width: 20.0,
                               ),
-                              this._buildSignUpButton(context),
+                              this._buildCancelButton(context),
                             ],
                           ),
                           SizedBox(
@@ -225,11 +277,5 @@ class _LoginStatePage extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    tokenController.dispose();
-    super.dispose();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:indoxx1/presentation/ui/add-user/add_user.dart';
 import 'package:indoxx1/presentation/ui/detail/movie_detail.dart';
 import 'package:indoxx1/presentation/ui/home/home_page.dart';
 import 'package:indoxx1/presentation/ui/login/login_page.dart';
@@ -16,3 +17,7 @@ var detailMovieHandler = new Handler(handlerFunc: (BuildContext context, Map<Str
   String id = params['id']?.first;
   return new MovieDetailView(id: id,);
 }); 
+
+var addUserHandler = new Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return new AddUserPage();
+});

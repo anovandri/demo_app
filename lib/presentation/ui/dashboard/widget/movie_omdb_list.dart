@@ -33,7 +33,6 @@ class _MovieOmdbListState extends State<MovieOmdbListView> {
         randomTitle = v;
       }
     });
-    //nouns.take(1000).forEach(print);
     movieBloc.add(MovieFetchEvent(title: randomTitle, type: 'movie'));
     return Container(
         child: BlocBuilder(

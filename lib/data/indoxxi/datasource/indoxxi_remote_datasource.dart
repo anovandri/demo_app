@@ -21,9 +21,6 @@ class IndoxxiRemoteDatasourceImpl implements IndoxxiDatasource {
   }
 
   @override
-  Future init({bool isCreate}) {}
-
-  @override
   Future<List<MovieFavoriteModel>> listOfFavoriteMovies() async {
     Uri uri = Uri.https(INDOXXI_DOMAIN, DOMAIN_PATH);
     final response = await client.get(uri, headers: {
@@ -78,4 +75,5 @@ class IndoxxiRemoteDatasourceImpl implements IndoxxiDatasource {
     
     return label;
   }
+
 }

@@ -5,7 +5,7 @@ import 'package:indoxx1/data/omdb/datasource/omdb_remote_datasource.dart';
 import 'package:indoxx1/data/omdb/model/movie.dart';
 
 class OmdbRepository {
-  static const String API_KEY = "1665f88";
+  static const String API_KEY = "22c46dff";
 
   final OmdbDatasource omdbRemoteDatasource = OmdbRemoteDatasourceImpl.create();
   final IndoxxiRepository indoxxiRepository = IndoxxiRepository();
@@ -15,7 +15,7 @@ class OmdbRepository {
 
   Future<MovieModel> getDetailMovie({String id}) async {
     MovieModel movie = await omdbRemoteDatasource.getDetailMovie(apiKey: API_KEY, id: id);
-    MovieFavoriteModel movieFavorite = await indoxxiRepository.getDetailMovie(id: movie.imdbId);
+    MovieFavoriteModel movieFavorite = await indoxxiRepository.getDetailMovie(id: id);
     if (movieFavorite != null && movieFavorite.id != null) {
       movie.isFavorite = true;
     } else {

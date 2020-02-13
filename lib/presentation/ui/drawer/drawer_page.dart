@@ -1,8 +1,10 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:indoxx1/presentation/ui/login/login_page.dart';
+import 'package:indoxx1/common/util/shared_preferences.dart';
+import 'package:indoxx1/common/util/shared_preferences_key.dart';
 import 'package:indoxx1/routes/application.dart';
 import 'package:indoxx1/routes/routes.dart';
+import 'package:path/path.dart';
 
 typedef IntCallback = void Function(int index);
 
@@ -10,30 +12,57 @@ class DrawerPage extends StatefulWidget {
   final IntCallback callback;
 
   const DrawerPage({Key key, @required this.callback}) : super(key: key);
-
+  
   @override
   _DrawerPage createState() => _DrawerPage();
+
 }
 
 class _DrawerPage extends State<DrawerPage> {
+  String tokenId;
+  String name;
+  String email;
+
   final TextStyle textStyle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w300,
   );
 
   @override
+  initState() {
+    super.initState();
+    SpUtil.getInstance().then((value) {
+      setState(() {
+        tokenId = value.getString(SharedPreferencesKeys.tokenId);
+        name = value.getString(SharedPreferencesKeys.name);
+        email = value.getString(SharedPreferencesKeys.email);  
+      });
+    });
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
         UserAccountsDrawerHeader(
-          accountName: Text("Alex Vegner"),
+          accountName: Text(
+            name,
+            style: TextStyle(
+              color: Colors.red[300],
+              decorationStyle: TextDecorationStyle.solid,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           accountEmail: Container(
             padding: const EdgeInsets.only(bottom: 20.0),
             child: Text(
-              "ovegn@aux.dkatalis.com",
+              email,
               style: TextStyle(
                 fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.red[300],
+                decorationStyle: TextDecorationStyle.solid,
               ),
             ),
           ),
@@ -41,7 +70,7 @@ class _DrawerPage extends State<DrawerPage> {
             image: DecorationImage(
               fit: BoxFit.cover,
               image: new NetworkImage(
-                  "https://hbimg.huabanimg.com/9bfa0fad3b1284d652d370fa0a8155e1222c62c0bf9d-YjG0Vt_fw658"),
+                  join("https://api.adorable.io/avatars/150", tokenId+'.png') ),
             ),
           ),
         ),
@@ -108,7 +137,8 @@ class _DrawerPage extends State<DrawerPage> {
             style: textStyle,
           ),
           onTap: () {
-            Application.router.navigateTo(context, Routes.login, transition: TransitionType.native);
+            Application.router.navigateTo(context, Routes.login,
+                transition: TransitionType.native);
           },
         ),
       ],
