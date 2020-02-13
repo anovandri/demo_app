@@ -60,7 +60,7 @@ class _MovieFavoriteListView extends State<MovieFavoriteListView> {
       margin: EdgeInsets.only(bottom: 10, top: 20),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: movies.length > 10 ? 10 : movies.length,
+        itemCount: movies.length,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
               onTap: () {

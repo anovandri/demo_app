@@ -271,24 +271,6 @@ class _MovieDetailState extends State<MovieDetailView> {
                 ],
               ),
             ),
-            // Positioned(
-            //   right: width / 2 - 25,
-            //   top: width,
-            //   child: FractionalTranslation(
-            //     translation: Offset(0.0, -0.5),
-            //     child: FloatingActionButton(
-            //       onPressed: () {
-            //         print('Touch');
-            //       },
-            //       backgroundColor: Colors.white,
-            //       child: Icon(
-            //         Icons.play_arrow,
-            //         color: Colors.red,
-            //         size: 40,
-            //       ),
-            //     ),
-            //   ),
-            // )
           ],
         );
       }),
@@ -429,6 +411,11 @@ class _MovieDetailState extends State<MovieDetailView> {
       isExpanded ? isExpanded = false : isExpanded = true;
     });
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
 
 class Mclipper extends CustomClipper<Path> {
@@ -458,4 +445,5 @@ class Mclipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return true;
   }
+
 }

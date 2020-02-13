@@ -278,4 +278,9 @@ class _AddUserPageState extends State<AddUserPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

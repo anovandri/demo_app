@@ -10,39 +10,16 @@ import 'package:random_words/random_words.dart';
 
 final MovieBloc movieBloc = MovieBloc();
 
-class MovieOmdbListView extends StatefulWidget {
+class OmdbListWidget extends StatefulWidget {
   final Function(String imdbId) onItemInteraction;
 
-  MovieOmdbListView({Key key, this.onItemInteraction}) : super(key: key);
+  OmdbListWidget({Key key, this.onItemInteraction}) : super(key: key);
 
   @override
-  _MovieOmdbListState createState() => _MovieOmdbListState();
+  _OmdbListWidgetState createState() => _OmdbListWidgetState();
 }
 
-class _MovieOmdbListState extends State<MovieOmdbListView> {
-  @override
-  Widget build(BuildContext context) {
-    var rng = new Random();
-    var l = new List.generate(12, (_) => rng.nextInt(1000));
-    var k = l.first;
-    var m = 0;
-    String randomTitle;
-    nouns.take(1000).forEach((v) {
-      m++;
-      if (m == k) {
-        randomTitle = v;
-      }
-    });
-    movieBloc.add(MovieFetchEvent(title: randomTitle, type: 'movie'));
-    return Container(
-        child: BlocBuilder(
-      bloc: movieBloc,
-      builder: (BuildContext context, MovieState state) {
-        return renderItem(state);
-      },
-    ));
-  }
-
+class _OmdbListWidgetState extends State<OmdbListWidget> {
   Widget renderItem(state) {
     if (state is MovieUninitializedState) {
       return Center(
@@ -67,26 +44,54 @@ class _MovieOmdbListState extends State<MovieOmdbListView> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    movieBloc.add(MovieFetchEvent(title: _getTitle(), type: 'movie'));
+  } 
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: 
+      BlocBuilder(
+      bloc: movieBloc,
+      builder: (BuildContext context, MovieState state) {
+        return renderItem(state);
+      },
+    )
+    // BlocConsumer<MovieBloc, MovieState>(builder: 
+    //  (BuildContext context, MovieState state) {
+    //     return renderItem(state);
+    //   },
+    //  listener: (context, state) {
+    //    return renderItem(state);
+    //  })
+    );
+  }
+
   Widget buildContent(List<MovieModel> movies, BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return Container(
-      height: width / 1.75,
+      height: height,
       margin: EdgeInsets.only(bottom: 10, top: 20),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: movies.length,
-        itemBuilder: (BuildContext context, int index) {
+      child: GridView.count(
+        scrollDirection: Axis.vertical,
+        crossAxisCount: 2,
+        children: List.generate(movies.length, (index) {
           return InkWell(
-              onTap: () {
-                if (widget.onItemInteraction != null) {
-                  widget.onItemInteraction(movies[index].imdbId);
-                } else {
-                  debugPrint("No handle");
-                }
-              },
-              child: _buildItem(movies[index].poster, movies[index].poster,
-                  width / 4, index == 0, movies[index].year));
-        },
+            onTap: () {
+              if (widget.onItemInteraction != null) {
+                widget.onItemInteraction(movies[index].imdbId);
+              } else {
+                debugPrint("No handle");
+              }
+            },
+            child: _buildItem(movies[index].poster, movies[index].poster,
+                width / 4, index == 0, movies[index].year),
+          );
+        }),
       ),
     );
   }
@@ -104,12 +109,12 @@ class _MovieOmdbListState extends State<MovieOmdbListView> {
           Image.network(
             imagePath,
             fit: BoxFit.cover,
-            width: itemHeight * 4 / 3,
-            height: itemHeight * 1.7,
+            width: itemHeight * 4 / 2,
+            height: itemHeight * 1.57,
           ),
           Container(
               alignment: Alignment.bottomLeft,
-              width: itemHeight * 4 / 3,
+              width: itemHeight * 4 / 2,
               height: itemHeight * 3,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -130,6 +135,21 @@ class _MovieOmdbListState extends State<MovieOmdbListView> {
         ],
       ),
     );
+  }
+
+  String _getTitle() {
+    var rng = new Random();
+    var l = new List.generate(12, (_) => rng.nextInt(1000));
+    var k = l.first;
+    var m = 0;
+    String randomTitle;
+    nouns.take(1000).forEach((v) {
+      m++;
+      if (m == k) {
+        randomTitle = v;
+      }
+    });
+    return randomTitle;
   }
 
   @override
