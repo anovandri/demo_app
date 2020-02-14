@@ -2,7 +2,6 @@ import 'package:indoxx1/data/indoxxi/datasource/indoxxi_datasource.dart';
 import 'package:indoxx1/data/indoxxi/datasource/indoxxi_local_datasource.dart';
 import 'package:indoxx1/data/indoxxi/datasource/indoxxi_remote_datasource.dart';
 import 'package:indoxx1/data/indoxxi/model/movie.dart';
-import 'package:indoxx1/data/indoxxi/model/user.dart';
 
 class IndoxxiRepository {
 

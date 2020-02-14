@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:indoxx1/presentation/ui/dashboard/dashboard_page.dart';
 import 'package:indoxx1/presentation/ui/drawer/drawer_page.dart';
+import 'package:indoxx1/presentation/ui/favorite/favorite_page.dart';
 import 'package:indoxx1/presentation/ui/search/search_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,6 +25,12 @@ class _HomePage extends State<HomePage> {
         setState(() {
           this._appBarTitle = "Search Movie";
           this._contentBody = SearchPage();
+        });
+        break;
+      case 2:
+        setState(() {
+          this._appBarTitle = "Favorite Movie";
+          this._contentBody = FavoritePage();
         });
         break;
       default:

@@ -21,3 +21,7 @@ var detailMovieHandler = new Handler(handlerFunc: (BuildContext context, Map<Str
 var addUserHandler = new Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return new AddUserPage();
 });
+
+var favorite = new Handler(handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return null;
+});
