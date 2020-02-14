@@ -4,11 +4,12 @@ import 'package:flutter_rating/flutter_rating.dart';
 import 'package:indoxx1/common/util/my_scroll_behavior.dart';
 import 'package:indoxx1/data/omdb/model/movie.dart';
 import 'package:indoxx1/presentation/bloc/event/movie_event.dart';
-import 'package:indoxx1/presentation/bloc/event/movie_favorite_event.dart';
 import 'package:indoxx1/presentation/bloc/movie_bloc.dart';
 import 'package:indoxx1/presentation/bloc/movie_favorite_bloc.dart';
 import 'package:indoxx1/presentation/bloc/state/movie_favorite_state.dart';
 import 'package:indoxx1/presentation/bloc/state/movie_state.dart';
+import 'package:indoxx1/presentation/ui/detail/widget/icon_button_action_widget.dart';
+import 'package:indoxx1/presentation/ui/detail/widget/icon_button_save_widget.dart';
 
 final MovieBloc movieBloc = MovieBloc();
 final MovieFavoriteBloc movieFavoriteBloc = MovieFavoriteBloc();
@@ -199,62 +200,7 @@ class _MovieDetailState extends State<MovieDetailView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.add,
-                          ),
-                          onPressed: () {
-                            AlertDialog alreadyDialog = AlertDialog(
-                              title: Text("Indo XX1"),
-                              content: Text("This movie is already favorited"),
-                              actions: <Widget>[
-                                FlatButton(
-                                    onPressed: () {
-                                      Navigator.of(context, rootNavigator: true)
-                                          .pop();
-                                    },
-                                    child: Text('OK')),
-                              ],
-                            );
-
-                            AlertDialog alertDialog = AlertDialog(
-                                title: Text("Indo XX1"),
-                                content: Text(
-                                    "Do you want to save as your favorite ?"),
-                                actions: [
-                                  FlatButton(
-                                      onPressed: () {
-                                        movieFavoriteBloc.add(
-                                            MovieFavoriteSaveEvent(
-                                                id: movie.imdbId,
-                                                label: movie.title,
-                                                rating: movie.imdbRating,
-                                                title: movie.title,
-                                                year: movie.year,
-                                                poster: movie.poster));
-
-                                        Navigator.of(context, rootNavigator: true)
-                                          .pop();
-                                      },
-                                      child: Text('Confirm')),
-                                  FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      },
-                                      child: Text('Cancel')),
-                                ]);
-
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return !movie.isFavorite
-                                      ? alertDialog
-                                      : alreadyDialog;
-                                });
-                          },
-                        ),
+                        movie.isFavorite ? IconButtonActionWidget() : IconButtonSaveWidget(movie: movie,),
                         Expanded(
                           child: Container(),
                         ),
